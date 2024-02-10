@@ -1,0 +1,72 @@
+Quando o aluno ou aluna da Alura faz alguma atividade dentro do fórum, como fazer uma pergunta ou responder alguém, a gente precisa que o fórum pegue essas informações e persista no banco de dados. Para isso, a gente vai criar um endpoint http, que vai ser hospedado dentro do Google cloud function, e através desse endpoint o fórum vai pegar as informações sobre a atividade e persistir no banco de dados por esse endpoint.
+
+Serverless ajuda e facilita a gerência de projetos que são hospedados em serviços em nuvem.
+
+
+serverless create --template=google-nodejs --path=forum-alura //cria o projeto no caminho especificado
+
+Configurar o serverless, dizer pra ele quais são as nossas funções, como elas funcionam, como devem ser utilizadas
+Pegar os nossos dados, informações, empacotar, aplicar no google cloud function, e conseguir um domínio para podermos utilizar a nossa função
+
+# arquivo serverless.yml
+A chave do dicionário representa o nome da função que vai estar dentro do Google cloud function. Dentro dela a gente tem duas funções, duas 
+propriedades importantes, uma delas é o handler, que representa o nome da nossa função em Java script, que no caso da função de exemplo está 
+como http. E a gente tem os eventos que vão disparar nossa função, que no caso tem o evento http.
+
+Ou seja, toda essa função vai ser do tipo http, mas como o serverless faz para conseguir achar e descobrir onde está nossa função só pelo nome dela? Primeiro vamos abrir o arquivo package.json. Ele vai procurar pela propriedade main. Essa propriedade representa o arquivo principal do nosso projeto, ele espera que esse arquivo esteja exportando a função que a gente declarou no serverless yml
+
+"""serverless.yml
+functions:
+  first: #nome da função no google cloud
+    handler: http # nome da função javascript
+    events:
+      - http: path
+"""
+
+"""index.js
+exports.http = (request, response) =>{
+    response.status(200).send('hello world');
+}
+"""
+ Vamos abrir aqui o index js, a gente pode ver que ele está exportando duas funções, uma chama http e outra chama event, e lá no service yml a gente consegue linkar essa função com o nome do handler. A gente está declarando o http e ele vai pegar a função http que está dentro do arquivo js.
+Criar uma conta de serviço, baixar, mudar as configs do serverless, no provider, para o projectId e o path do arquivo de serviço de conta
+ > serverless deploy
+
+ O que é uma conta de serviço? Conta de serviço é como se fosse uma conta de usuário. A diferença é que ao invés de representar uma pessoa, ele vai representar um programa ou um serviço que vai consumir a conta do Google cloud.
+
+Com nossa função já enviada para o Google cloud a gente pode ver que aqui na mensagem do terminal a gente recebeu o nome da nossa função e a 
+url. Essa url é o endpoint que foi criado para a gente conseguir acessar e utilizar a função.
+
+
+Precisamos de uma função que recebe os dados que vão para o pubsub e que valide esses dados e publique dentro do pubsub.
+
+> npm install @google-cloud/pubsub
+
+Além de configurar informações essenciais na nossa primeira função (recebeAtividade()), também podemos nos aprofundar e configurar a alocação de memória, timeout, variáveis de ambiente e várias outras coisas para cada função que criamos usando o Serverless.
+https://www.serverless.com/framework/docs/providers/google/guide/functions/
+
+Resumo: Nessa aula, criamos uma função em JavaScript que representa um endpoint HTTP. A função recebe os dados sobre uma atividade na plataforma e encaminha para o PubSub.
+
+# Aula 2 - trabalhando com BigQuery
+
+> npm install @google-cloud/bigquery
+
+Pra rodar a criação do bigquery
+> node bigquery/criarDataset.js
+
+Se der erro, provavelmnte é porque não encontrou as credenciais
+Pra evitar configurar sempre, pode-se usar variáveis de ambiente
+
+Definir a variável de ambiente om nome GOOGLE_CLOUD_PROJECT para o nome do projeto
+GOOGLE_APPLICATION_CREDENTIALS com o caminho do arquivo  do service account
+================================Atividades================================
+
+================================Quiz================================
+1)
+Na empresa onde Rodrigo trabalha, precisam de novos endpoints com funcionalidades para registrar alguns dados no banco de dados e fazer alguns cálculos.
+
+Porém, a empresa também está reescrevendo sua API principal, que é onde Rodrigo poderia implementar as novas funcionalidades.
+
+A partir do que estudamos em aula, como Rodrigo poderia implementar as novas funcionalidades?
+
+> Com uma Cloud Function HTTP, Rodrigo consegue implementar novas funcionalidades sem usar o projeto antigo e também pode reutilizar exatamente o mesmo código na nova versão da API.

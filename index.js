@@ -1,0 +1,1 @@
+exports.recebeAtividade = require('./funcoes/recebeAtividade');
