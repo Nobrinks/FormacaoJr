@@ -1,0 +1,5 @@
+resources:
+  - type: storage.v1.bucket
+    name: sls-forum-alura-dev-1697666853654
+    properties:
+      location: us-central1
