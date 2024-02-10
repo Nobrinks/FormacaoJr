@@ -1,0 +1,19 @@
+resources:
+  - type: storage.v1.bucket
+    name: sls-forum-alura-dev-1697666853654
+    properties:
+      location: us-central1
+  - type: gcp-types/cloudfunctions-v1:projects.locations.functions
+    name: forum-alura-dev-recebeAtividade
+    properties:
+      parent: projects/my-project/locations/us-central1
+      availableMemoryMb: 256
+      runtime: nodejs10
+      timeout: 60s
+      entryPoint: recebeAtividade
+      function: forum-alura-dev-recebeAtividade
+      sourceArchiveUrl: >-
+        gs://sls-forum-alura-dev-1697666853654/serverless/forum-alura/dev/1697666865007-2023-10-18T22:07:45.007Z/forum-alura.zip
+      labels: {}
+      httpsTrigger:
+        url: path
